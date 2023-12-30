@@ -1,0 +1,86 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: BlogArticles API
+paths:
+  /BlogArticles:
+    get:
+      summary: Get all BlogArticles
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BlogArticle"
+    post:
+      summary: Create a new BlogArticle
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BlogArticle"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogArticle"
+  /BlogArticles/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Get a BlogArticle by ID
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogArticle"
+        "404":
+          description: BlogArticle not found
+    put:
+      summary: Update a BlogArticle by ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BlogArticle"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogArticle"
+        "404":
+          description: BlogArticle not found
+    delete:
+      summary: Delete a BlogArticle by ID
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: BlogArticle not found
+components:
+  schemas:
+    BlogArticle:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        firstName:
+          type: string
+        lastName:
+          type: string
