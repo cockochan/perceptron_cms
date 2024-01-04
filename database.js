@@ -88,7 +88,6 @@ export default class Database {
 
     request.input("id", sql.Int, +id);
     request.input("title", sql.NVarChar(255), data.title);
-    request.input("lastName", sql.NVarChar(255), data.lastName);
     request.input("subtitle", sql.NVarChar(255), data.subtitle);
     request.input("author", sql.NVarChar(255), data.author);
     request.input("date_published", sql.Date, data.date_published);
@@ -97,7 +96,7 @@ export default class Database {
     request.input("category", sql.NVarChar(255), data.category);
 
     const result = await request.query(
-      `UPDATE BlogArticle SET firstName=@firstName, lastName=@lastName WHERE id = @id`
+      `UPDATE BlogArticle SET author=@author, title=@title  WHERE id = @id`
     );
 
     return result.rowsAffected[0];
