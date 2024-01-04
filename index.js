@@ -1,7 +1,7 @@
 import express from "express";
 import { config } from "./config.js";
 import Database from "./database.js";
-import cors  from "./cors";
+import cors  from "cors";
 // Import App routes
 import BlogArticle from "./BlogArticle.js";
 import openapi from "./openapi.js";
