@@ -59,7 +59,9 @@ export default class Database {
   async readAll() {
     await this.connect();
     const request = this.poolconnection.request();
-    const result = await request.query(`SELECT *  FROM [dbo].[BlogArticle]`);
+    const result = await request.query(
+      `SELECT top 10 *  FROM [dbo].[BlogArticle] `
+    );
 
     return result.recordsets[0];
   }
