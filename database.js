@@ -46,8 +46,14 @@ export default class Database {
     await this.connect();
     const request = this.poolconnection.request();
 
-    request.input("firstName", sql.NVarChar(255), data.firstName);
+    request.input("title", sql.NVarChar(255), data.title);
     request.input("lastName", sql.NVarChar(255), data.lastName);
+    request.input("subtitle", sql.NVarChar(255), data.subtitle);
+    request.input("author", sql.NVarChar(255), data.author);
+    request.input("date_published", sql.Date, data.date_published);
+    request.input("category", sql.NVarChar(255), data.category);
+    request.input("content", sql.Text(), data.content);
+    request.input("category", sql.NVarChar(255), data.category);
 
     const result = await request.query(
       `INSERT INTO BlogArticle (firstName, lastName) VALUES (@firstName, @lastName)`
@@ -83,11 +89,16 @@ export default class Database {
     const request = this.poolconnection.request();
 
     request.input("id", sql.Int, +id);
-    request.input("firstName", sql.NVarChar(255), data.firstName);
-    request.input("lastName", sql.NVarChar(255), data.lastName);
+    request.input("title", sql.NVarChar(255), data.title);
+    request.input("subtitle", sql.NVarChar(255), data.subtitle);
+    request.input("author", sql.NVarChar(255), data.author);
+    request.input("date_published", sql.Date, data.date_published);
+    request.input("category", sql.NVarChar(255), data.category);
+    request.input("content", sql.Text(), data.content);
+    request.input("category", sql.NVarChar(255), data.category);
 
     const result = await request.query(
-      `UPDATE BlogArticle SET firstName=@firstName, lastName=@lastName WHERE id = @id`
+      `UPDATE BlogArticle SET author=@author, title=@title  WHERE id = @id`
     );
 
     return result.rowsAffected[0];

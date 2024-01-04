@@ -22,7 +22,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BlogArticle"
+              $ref: "#/components/schemas/BlogArticleInput"
       responses:
         "201":
           description: Created
@@ -55,7 +55,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BlogArticle"
+              $ref: "#/components/schemas/BlogArticleInput"
       responses:
         "200":
           description: OK
@@ -77,10 +77,55 @@ components:
     BlogArticle:
       type: object
       properties:
-        id:
+        article_id:
           type: integer
           readOnly: true
-        firstName:
+        title:
           type: string
-        lastName:
+        subtitle:
           type: string
+        author:
+          type: string
+        date_published:
+          type: string
+          format: date-time
+        category:
+          type: string
+        content:
+          type: string
+        meta_description:
+          type: string
+        reactions:
+          type: object
+          properties:
+            likes:
+              type: integer
+            shares:
+              type: integer
+            comments:
+              type: integer
+
+    BlogArticleInput:
+      type: object
+      properties:
+        title:
+          type: string
+        subtitle:
+          type: string
+        author:
+          type: string
+        category:
+          type: string
+        content:
+          type: string
+        meta_description:
+          type: string
+        reactions:
+          type: object
+          properties:
+            likes:
+              type: integer
+            shares:
+              type: integer
+            comments:
+              type: integer
