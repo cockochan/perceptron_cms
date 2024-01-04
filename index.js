@@ -9,7 +9,7 @@ import openapi from "./openapi.js";
 const port = process.env.PORT || 3000;
 
 const app = express();
-
+app.use(cors());
 // Development only - don't do in production
 // Run this to create the table in the database
 if (process.env.NODE_ENV === "development") {
