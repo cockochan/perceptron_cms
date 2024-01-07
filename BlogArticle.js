@@ -14,7 +14,7 @@ const database = new Database(config);
 router.get("/", async (_, res) => {
   try {
     // Return a list of BlogArticles
-    const BlogArticles = await database.readAll();
+    const BlogArticles = await database.readTen();
     console.log(`BlogArticles: ${JSON.stringify(BlogArticles)}`);
     res.status(200).json(BlogArticles);
   } catch (err) {

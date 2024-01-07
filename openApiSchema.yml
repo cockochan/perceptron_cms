@@ -72,11 +72,71 @@ paths:
           description: No Content
         "404":
           description: BlogArticle not found
+  /Users:
+    post:
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  /Users/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Get a user by ID
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: User not found
+    put:
+      summary: Update a user by ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserInput"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: User not found
+    delete:
+      summary: Delete a user by ID
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: User not found
 components:
   schemas:
     BlogArticle:
       type: object
       properties:
+        id:
+          type: integer
         article_id:
           type: integer
           readOnly: true
@@ -104,10 +164,13 @@ components:
               type: integer
             comments:
               type: integer
-
+        image_url:
+          type: string
     BlogArticleInput:
       type: object
       properties:
+        id:
+          type: integer
         title:
           type: string
         subtitle:
@@ -129,3 +192,22 @@ components:
               type: integer
             comments:
               type: integer
+        image_url:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+
+    UserInput:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
