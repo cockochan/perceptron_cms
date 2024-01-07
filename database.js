@@ -21,7 +21,9 @@ export default class Database {
         console.log("Database already connected");
       }
     } catch (error) {
-      console.error(`Error connecting to database: ${JSON.stringify(error)}`);
+      console.error(
+        `Error connecting to the database: ${JSON.stringify(error)}`
+      );
     }
   }
 
@@ -41,14 +43,15 @@ export default class Database {
 
     return result.rowsAffected[0];
   }
-  async create(data) {
+
+  async createBlogArticle(data) {
     await this.connect();
     const request = this.poolconnection.request();
 
     request.input("title", sql.NVarChar(255), data.title);
     request.input("subtitle", sql.NVarChar(255), data.subtitle);
     request.input("author", sql.NVarChar(255), data.author);
-    request.input("date_published", sql.Date, data.date_published);
+    request.input("date_published", sql.DateTime, data.date_published);
     request.input("category", sql.NVarChar(255), data.category);
     request.input("content", sql.Text(), data.content);
     request.input("image_url", sql.NVarChar(255), data.image_url);
@@ -60,7 +63,7 @@ export default class Database {
     return result.recordset[0].id;
   }
 
-  async update(id, data) {
+  async updateBlogArticle(id, data) {
     await this.connect();
     const request = this.poolconnection.request();
 
@@ -68,7 +71,7 @@ export default class Database {
     request.input("title", sql.NVarChar(255), data.title);
     request.input("subtitle", sql.NVarChar(255), data.subtitle);
     request.input("author", sql.NVarChar(255), data.author);
-    request.input("date_published", sql.Date, data.date_published);
+    request.input("date_published", sql.DateTime, data.date_published);
     request.input("category", sql.NVarChar(255), data.category);
     request.input("content", sql.Text(), data.content);
     request.input("image_url", sql.NVarChar(255), data.image_url);
@@ -80,22 +83,42 @@ export default class Database {
     return result.recordset[0].rowsAffected;
   }
 
-  // Add similar modifications for other CRUD operations (delete, getById, getAll, etc.)
+  async deleteBlogArticle(id) {
+    await this.connect();
 
-  async readAll() {
-    await this.connect();
+    const idAsNumber = Number(id);
+
     const request = this.poolconnection.request();
-    const result = await request.query(`SELECT *  FROM [dbo].[BlogArticle] `);
+    const result = await request
+      .input("id", sql.Int, idAsNumber)
+      .query(`DELETE FROM BlogArticle WHERE id = @id`);
+
+    return result.rowsAffected[0];
   }
-  async readTen() {
+
+  async getAllBlogArticles() {
     await this.connect();
     const request = this.poolconnection.request();
-    const result = await request.query(
-      `SELECT top 10 *  FROM [dbo].[BlogArticle] `
-    );
+    const result = await request.query(`SELECT * FROM BlogArticle`);
 
     return result.recordsets[0];
   }
+
+  async getBlogArticleById(id) {
+    await this.connect();
+    const request = this.poolconnection.request();
+
+    request.input("id", sql.Int, id);
+
+    const result = await request.query(
+      `SELECT * FROM BlogArticle WHERE id = @id`
+    );
+
+    return result.recordset[0];
+  }
+
+  // Add similar modifications for other CRUD operations related to BlogArticle
+
   async createUser(userData) {
     await this.connect();
     const request = this.poolconnection.request();
@@ -157,49 +180,5 @@ export default class Database {
     const result = await request.query(`SELECT * FROM Users WHERE id = @id`);
 
     return result.recordset[0];
-  }
-  async read(id) {
-    await this.connect();
-
-    const request = this.poolconnection.request();
-    const result = await request
-      .input("id", sql.Int, +id)
-      .query(`SELECT * FROM [dbo].[BlogArticle] WHERE id = @id`);
-
-    return result.recordset[0];
-  }
-
-  async update(id, data) {
-    await this.connect();
-
-    const request = this.poolconnection.request();
-
-    request.input("id", sql.Int, +id);
-    request.input("title", sql.NVarChar(255), data.title);
-    request.input("subtitle", sql.NVarChar(255), data.subtitle);
-    request.input("author", sql.NVarChar(255), data.author);
-    request.input("date_published", sql.Date, data.date_published);
-    request.input("category", sql.NVarChar(255), data.category);
-    request.input("content", sql.Text(), data.content);
-    request.input("category", sql.NVarChar(255), data.category);
-
-    const result = await request.query(
-      `UPDATE BlogArticle SET author=@author, title=@title  WHERE id = @id`
-    );
-
-    return result.rowsAffected[0];
-  }
-
-  async delete(id) {
-    await this.connect();
-
-    const idAsNumber = Number(id);
-
-    const request = this.poolconnection.request();
-    const result = await request
-      .input("id", sql.Int, idAsNumber)
-      .query(`DELETE  FROM [dbo].[BlogArticle] WHERE id = @id`);
-
-    return result.rowsAffected[0];
   }
 }

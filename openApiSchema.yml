@@ -130,16 +130,14 @@ paths:
           description: No Content
         "404":
           description: User not found
+
 components:
   schemas:
     BlogArticle:
       type: object
       properties:
-        id:
-          type: integer
         article_id:
           type: integer
-          readOnly: true
         title:
           type: string
         subtitle:
@@ -166,11 +164,15 @@ components:
               type: integer
         image_url:
           type: string
+        featured:
+          type: boolean
+        keywords:
+          type: array
+          items:
+            type: string
     BlogArticleInput:
       type: object
       properties:
-        id:
-          type: integer
         title:
           type: string
         subtitle:
@@ -194,6 +196,12 @@ components:
               type: integer
         image_url:
           type: string
+        featured:
+          type: boolean
+        keywords:
+          type: array
+          items:
+            type: string
     User:
       type: object
       properties:
@@ -203,7 +211,6 @@ components:
           type: string
         email:
           type: string
-
     UserInput:
       type: object
       properties:

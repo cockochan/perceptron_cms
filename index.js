@@ -35,7 +35,7 @@ app.use("/api-docs", openapi);
 app.use("/BlogArticles", BlogArticle);
 
 // User route
-app.post("/api/users", async (req, res) => {
+app.post("/api/Users", async (req, res) => {
   try {
     const userData = req.body; // Assuming user data is sent in the request body
 
