@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
     // Create a BlogArticle
     const BlogArticle = req.body;
     console.log(`BlogArticle: ${JSON.stringify(BlogArticle)}`);
-    const rowsAffected = await database.create(BlogArticle);
+    const rowsAffected = await database.createBlogArticle(BlogArticle);
     res.status(201).json({ rowsAffected });
   } catch (err) {
     res.status(500).json({ error: err?.message });

@@ -9,7 +9,14 @@ import UserRouter from "./User.js";
 const port = process.env.FROTEND_PORT || 3000;
 
 const app = express();
-app.use(cors());
+const cors = require("cors");
+
+const corsOptions = {
+  AccessControlAllowOrigin: "*",
+  origin: "https://abc.onrender.com",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+};
+app.use(cors(corsOptions));
 app.use("/users", UserRouter);
 // Create an instance of the database
 const database = new Database(config);
