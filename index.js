@@ -9,7 +9,6 @@ import UserRouter from "./User.js";
 const port = process.env.FROTEND_PORT || 3000;
 
 const app = express();
-const cors = require("cors");
 
 const corsOptions = {
   origin: [
