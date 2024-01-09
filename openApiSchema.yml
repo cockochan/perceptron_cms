@@ -201,7 +201,6 @@ components:
         keywords:
           type: array
           items:
-            type: string
     User:
       type: object
       properties:

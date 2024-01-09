@@ -120,18 +120,65 @@ export default class Database {
   // Add similar modifications for other CRUD operations related to BlogArticle
 
   async createUser(userData) {
-    await this.connect();
-    const request = this.poolconnection.request();
+    try {
+      await this.connect();
 
-    request.input("username", sql.NVarChar(255), userData.username);
-    request.input("email", sql.NVarChar(255), userData.email);
-    // Add other input parameters based on your User entity
+      const request = this.poolconnection.request();
 
-    const result = await request.query(
-      `INSERT INTO Users (username, email) VALUES (@username, @email); SELECT SCOPE_IDENTITY() AS id;`
-    );
+      // Assuming 'input_' as a prefix for SQL parameters
+      request.input(
+        "input_homeAccountId",
+        sql.NVarChar(255),
+        userData.homeAccountId
+      );
+      request.input(
+        "input_environment",
+        sql.NVarChar(255),
+        userData.environment
+      );
+      request.input("input_tenantId", sql.NVarChar(255), userData.tenantId);
+      request.input(
+        "input_localAccountId",
+        sql.NVarChar(255),
+        userData.localAccountId
+      );
+      request.input("input_username", sql.NVarChar(255), userData.username);
+      request.input("input_name", sql.NVarChar(255), userData.name);
+      request.input(
+        "input_authorityType",
+        sql.NVarChar(20),
+        userData.authorityType
+      );
 
-    return result.recordset[0].id;
+      // Assuming the 'tenantProfiles' and 'idTokenClaims' are empty objects
+      request.input(
+        "input_tenantProfiles",
+        sql.NVarChar(255),
+        JSON.stringify(userData.tenantProfiles || {})
+      );
+      request.input(
+        "input_idTokenClaims",
+        sql.NVarChar(255),
+        JSON.stringify(userData.idTokenClaims || {})
+      );
+
+      // Add other input parameters based on your User entity
+
+      const result = await request.query(
+        `
+        INSERT INTO Users (homeAccountId, environment, tenantId, localAccountId, username, name, authorityType, tenantProfiles, idTokenClaims)
+        VALUES (@input_homeAccountId, @input_environment, @input_tenantId, @input_localAccountId, @input_username, @input_name, @input_authorityType, @input_tenantProfiles, @input_idTokenClaims);
+  
+        SELECT SCOPE_IDENTITY() AS id;
+        `
+      );
+
+      return result.recordset[0].id;
+    } catch (error) {
+      // Handle errors appropriately
+      console.error("Error creating user:", error.message);
+      throw error;
+    }
   }
 
   async updateUser(userId, userData) {

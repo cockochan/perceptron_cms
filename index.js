@@ -40,7 +40,7 @@ app.post("/api/Users", async (req, res) => {
     const userData = req.body; // Assuming user data is sent in the request body
 
     // Assuming you have a 'User' model or a 'users' table in your database
-    const userId = await database.create(userData);
+    const userId = await database.createUser(userData);
 
     res.status(201).json({ userId });
   } catch (error) {
