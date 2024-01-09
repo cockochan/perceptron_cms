@@ -95,7 +95,23 @@ export default class Database {
 
     return result.rowsAffected[0];
   }
+  async read(id) {
+    await this.connect();
+    const request = this.poolconnection.request();
+    const result = await request
+      .input("id", sql.Int, +id)
+      .query(`SELECT * FROM [dbo].[BlogArticle] WHERE id = @id`);
+    return result.recordset[0];
+  }
 
+
+  async readTen() {
+    await this.connect();
+    const request = this.poolconnection.request();
+    const result = await request.query(`SELECT top 10 * FROM [dbo].[BlogArticle]`)
+
+    return result.recordsets[0];
+  }
   async getAllBlogArticles() {
     await this.connect();
     const request = this.poolconnection.request();
