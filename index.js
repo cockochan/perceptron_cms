@@ -12,7 +12,11 @@ const app = express();
 const cors = require("cors");
 
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://perceptron.dev"],
+  origin: [
+    "http://localhost:3000",
+    "https://perceptron.dev",
+    "http://percms.ukwest.cloudapp.azure.com/",
+  ],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   optionsSuccessStatus: 204,
