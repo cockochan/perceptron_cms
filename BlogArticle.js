@@ -11,7 +11,7 @@ console.log(config);
 // Create database object
 const database = new Database(config);
 
-router.get("/BlogArticles", async (_, res) => {
+router.get("/", async (_, res) => {
   try {
     // Return a list of BlogArticles
     const BlogArticles = await database.readTen();

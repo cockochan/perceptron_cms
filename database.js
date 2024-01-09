@@ -103,10 +103,12 @@ export default class Database {
       .query(`SELECT * FROM [dbo].[BlogArticle] WHERE id = @id`);
     return result.recordset[0];
   }
+
+
   async readTen() {
     await this.connect();
     const request = this.poolconnection.request();
-    `SELECT top 10 * FROM [dbo].[BlogArticle]`
+    const result = await request.query(`SELECT top 10 * FROM [dbo].[BlogArticle]`)
 
     return result.recordsets[0];
   }
