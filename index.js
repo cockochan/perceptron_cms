@@ -12,9 +12,10 @@ const app = express();
 const cors = require("cors");
 
 const corsOptions = {
-  AccessControlAllowOrigin: "*",
-  origin: "https://abc.onrender.com",
+  origin: ["http://localhost:3000", "https://perceptron.dev"],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+  optionsSuccessStatus: 204,
 };
 app.use(cors(corsOptions));
 app.use("/users", UserRouter);
