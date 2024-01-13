@@ -227,7 +227,25 @@ components:
     UserInput:
       type: object
       properties:
+        homeAccountId:
+          type: string
+        environment:
+          type: string
+        tenantId:
+          type: string
+        localAccountId:
+          type: string
         username:
           type: string
+        name:
+          type: string
+        authorityType:
+          type: string
+        tenantProfiles:
+          type: object
+          properties: {}
+        idTokenClaims:
+          type: object
+          properties: {}
         email:
           type: string
