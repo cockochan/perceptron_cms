@@ -46,7 +46,7 @@ app.use("/api-docs", openapi);
 app.use("/BlogArticles", BlogArticle);
 
 // User route
-app.post("/api/Users", async (req, res) => {
+app.post("/Users", async (req, res) => {
   try {
     const userData = req.body; // Assuming user data is sent in the request body
 
@@ -71,4 +71,35 @@ app.use("*", (_, res) => {
 // Start the server
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
+});
+app.post("/Comments", async (req, res) => {
+  try {
+    const { userId, content } = req.body;
+
+    // Create a new comment
+    const commentId = await database.createComment(userId, content);
+
+    res.status(201).json({ commentId });
+  } catch (error) {
+    console.error("Error creating comment:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/Comments/:id", async (req, res) => {
+  try {
+    const commentId = req.params.id;
+
+    // Retrieve a comment by ID
+    const comment = await database.getCommentById(commentId);
+
+    if (comment) {
+      res.status(200).json(comment);
+    } else {
+      res.status(404).json({ error: "Comment not found" });
+    }
+  } catch (error) {
+    console.error("Error retrieving comment:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });

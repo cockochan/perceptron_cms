@@ -1,5 +1,5 @@
 import sql from "mssql";
-
+const COMMENT_TABLE = "Comments";
 export default class Database {
   config = {};
   poolconnection = null;
@@ -104,11 +104,12 @@ export default class Database {
     return result.recordset[0];
   }
 
-
   async readTen() {
     await this.connect();
     const request = this.poolconnection.request();
-    const result = await request.query(`SELECT top 10 * FROM [dbo].[BlogArticle]`)
+    const result = await request.query(
+      `SELECT top 10 * FROM [dbo].[BlogArticle]`
+    );
 
     return result.recordsets[0];
   }
@@ -211,6 +212,83 @@ export default class Database {
     );
 
     return result.recordset[0].rowsAffected;
+  }
+  async createComment(userId, content) {
+    try {
+      await this.connect();
+      const request = this.poolconnection.request();
+
+      request.input("userId", sql.Int, userId);
+      request.input("content", sql.NVarChar(sql.MAX), content);
+      request.input("timestamp", sql.DateTime, new Date());
+
+      const result = await request.query(`
+        INSERT INTO ${COMMENT_TABLE} (userId, content, timestamp)
+        VALUES (@userId, @content, @timestamp);
+        SELECT SCOPE_IDENTITY() AS commentId;
+      `);
+
+      return result.recordset[0].commentId;
+    } catch (error) {
+      console.error("Error creating comment:", error.message);
+      throw error;
+    }
+  }
+  async getCommentById(commentId) {
+    try {
+      await this.connect();
+      const request = this.poolconnection.request();
+
+      request.input("commentId", sql.Int, commentId);
+
+      const result = await request.query(`
+        SELECT * FROM ${COMMENT_TABLE} WHERE commentId = @commentId
+      `);
+
+      return result.recordset[0];
+    } catch (error) {
+      console.error("Error getting comment:", error.message);
+      throw error;
+    }
+  }
+
+  async updateComment(commentId, content) {
+    try {
+      await this.connect();
+      const request = this.poolconnection.request();
+
+      request.input("commentId", sql.Int, commentId);
+      request.input("content", sql.NVarChar(sql.MAX), content);
+
+      const result = await request.query(`
+        UPDATE ${COMMENT_TABLE} SET content = @content WHERE commentId = @commentId;
+        SELECT @@ROWCOUNT AS rowsAffected;
+      `);
+
+      return result.recordset[0].rowsAffected;
+    } catch (error) {
+      console.error("Error updating comment:", error.message);
+      throw error;
+    }
+  }
+
+  async deleteComment(commentId) {
+    try {
+      await this.connect();
+      const request = this.poolconnection.request();
+
+      request.input("commentId", sql.Int, commentId);
+
+      const result = await request.query(`
+        DELETE FROM ${COMMENT_TABLE} WHERE commentId = @commentId;
+        SELECT @@ROWCOUNT AS rowsAffected;
+      `);
+
+      return result.recordset[0].rowsAffected;
+    } catch (error) {
+      console.error("Error deleting comment:", error.message);
+      throw error;
+    }
   }
 
   async deleteUser(userId) {

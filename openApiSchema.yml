@@ -72,6 +72,99 @@ paths:
           description: No Content
         "404":
           description: BlogArticle not found
+  /BlogArticles/{id}/Comments:
+    get:
+      summary: Get comments for a BlogArticle by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Comment"
+        "404":
+          description: BlogArticle not found
+
+    post:
+      summary: Create a new comment for a BlogArticle by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CommentInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+
+  /BlogArticles/{articleId}/Comments/{commentId}:
+    parameters:
+      - name: articleId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: commentId
+        in: path
+        required: true
+        schema:
+          type: integer
+
+    get:
+      summary: Get a comment by ID for a specific BlogArticle
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+        "404":
+          description: Comment not found
+
+    put:
+      summary: Update a comment by ID for a specific BlogArticle
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CommentInput"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+        "404":
+          description: Comment not found
+
+    delete:
+      summary: Delete a comment by ID for a specific BlogArticle
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Comment not found
   /Users:
     post:
       summary: Create a new user
@@ -160,8 +253,8 @@ components:
               type: integer
             shares:
               type: integer
-            comments:
-              type: integer
+            comment: # Use singular form here
+              $ref: "#/components/schemas/Comment" # Reference to Comment schema
         image_url:
           type: string
         featured:
@@ -192,8 +285,8 @@ components:
               type: integer
             shares:
               type: integer
-            comments:
-              type: integer
+            comment: # Use singular form here
+              $ref: "#/components/schemas/Comment" # Reference to Comment schema
         image_url:
           type: string
         featured:
@@ -201,6 +294,7 @@ components:
         keywords:
           type: array
           items:
+            type: string
     User:
       type: object
       properties:
@@ -224,6 +318,21 @@ components:
         idTokenClaims:
           type: object
           properties: {}
+        avatar:
+          type: string
+        comments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Comment"
+        reactions:
+          type: object
+          properties:
+            likes:
+              type: integer
+            shares:
+              type: integer
+            comment: # Use singular form here
+              $ref: "#/components/schemas/Comment" # Reference to Comment schema
     UserInput:
       type: object
       properties:
@@ -241,11 +350,37 @@ components:
           type: string
         authorityType:
           type: string
-        tenantProfiles:
+        avatar:
+          type: string
+        comments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Comment"
+        reactions:
           type: object
-          properties: {}
-        idTokenClaims:
-          type: object
-          properties: {}
-        email:
+          properties:
+            likes:
+              type: integer
+            shares:
+              type: integer
+            comment: # Use singular form here
+              $ref: "#/components/schemas/Comment" # Reference to Comment schema
+    Comment:
+      type: object
+      properties:
+        commentId:
+          type: integer
+        userId:
+          type: string
+        content:
+          type: string
+        timestamp:
+          type: string
+
+    CommentInput:
+      type: object
+      properties:
+        userId:
+          type: string
+        content:
           type: string
