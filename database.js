@@ -43,7 +43,6 @@ export default class Database {
 
     return result.rowsAffected[0];
   }
-
   async createBlogArticle(data) {
     await this.connect();
     const request = this.poolconnection.request();
@@ -56,8 +55,12 @@ export default class Database {
     request.input("content", sql.Text(), data.content);
     request.input("image_url", sql.NVarChar(255), data.image_url);
 
+    // New inputs for the 'featured' and 'main' columns
+    request.input("featured", sql.Bit, data.featured || false);
+    request.input("main", sql.Bit, data.main || false);
+
     const result = await request.query(
-      `INSERT INTO BlogArticle (title, subtitle, author, date_published, category, content, image_url) VALUES (@title, @subtitle, @author, @date_published, @category, @content, @image_url); SELECT SCOPE_IDENTITY() AS id;`
+      `INSERT INTO BlogArticle (title, subtitle, author, date_published, category, content, image_url, featured, main) VALUES (@title, @subtitle, @author, @date_published, @category, @content, @image_url, @featured, @main); SELECT SCOPE_IDENTITY() AS id;`
     );
 
     return result.recordset[0].id;
@@ -76,8 +79,12 @@ export default class Database {
     request.input("content", sql.Text(), data.content);
     request.input("image_url", sql.NVarChar(255), data.image_url);
 
+    // New inputs for the 'featured' and 'main' columns
+    request.input("featured", sql.Bit, data.featured || false);
+    request.input("main", sql.Bit, data.main || false);
+
     const result = await request.query(
-      `UPDATE BlogArticle SET title = @title, subtitle = @subtitle, author = @author, date_published = @date_published, category = @category, content = @content, image_url = @image_url WHERE id = @id; SELECT @@ROWCOUNT AS rowsAffected;`
+      `UPDATE BlogArticle SET title = @title, subtitle = @subtitle, author = @author, date_published = @date_published, category = @category, content = @content, image_url = @image_url, featured = @featured, main = @main WHERE id = @id; SELECT @@ROWCOUNT AS rowsAffected;`
     );
 
     return result.recordset[0].rowsAffected;
