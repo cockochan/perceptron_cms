@@ -253,12 +253,14 @@ components:
               type: integer
             shares:
               type: integer
-            comment: # Use singular form here
-              $ref: "#/components/schemas/Comment" # Reference to Comment schema
+            comment:
+              $ref: "#/components/schemas/Comment"
         image_url:
           type: string
         featured:
-          type: boolean
+          type: boolean # Add the "featured" property
+        main:
+          type: boolean # Add the "main" property
         keywords:
           type: array
           items:
@@ -285,12 +287,14 @@ components:
               type: integer
             shares:
               type: integer
-            comment: # Use singular form here
-              $ref: "#/components/schemas/Comment" # Reference to Comment schema
+            comment:
+              $ref: "#/components/schemas/Comment"
         image_url:
           type: string
         featured:
-          type: boolean
+          type: boolean # Add the "featured" property
+        main:
+          type: boolean # Add the "main" property
         keywords:
           type: array
           items:
