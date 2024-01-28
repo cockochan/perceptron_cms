@@ -50,7 +50,13 @@ export default class Database {
     request.input("title", sql.NVarChar(255), data.title);
     request.input("subtitle", sql.NVarChar(255), data.subtitle);
     request.input("author", sql.NVarChar(255), data.author);
-    request.input("date_published", sql.DateTime, data.date_published);
+
+    // Ensure date_published has a valid value, or set a default value if not provided
+    const datePublished = data.date_published
+      ? new Date(data.date_published)
+      : new Date();
+    request.input("date_published", sql.DateTime, datePublished);
+
     request.input("category", sql.NVarChar(255), data.category);
     request.input("content", sql.Text(), data.content);
     request.input("image_url", sql.NVarChar(255), data.image_url);
